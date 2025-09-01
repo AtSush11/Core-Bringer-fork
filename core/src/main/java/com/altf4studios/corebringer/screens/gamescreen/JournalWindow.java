@@ -19,7 +19,12 @@ public class JournalWindow extends Window {
         this.setModal(true);
         this.setMovable(false);
         this.pad(-40);
-        this.setSize(1200, 900);
+        // WINDOW SIZE AND POSITION:
+        // - setSize(1200, 900): window dimensions (width x height)
+        // - setPosition: window position (x, y coordinates)
+        //   - x: Gdx.graphics.getWidth() / 2 - 800
+        //   - y: Gdx.graphics.getHeight() / 2 - 800
+        this.setSize(1400, 900);
         this.setPosition(
             Gdx.graphics.getWidth() / 2 - 800,
             Gdx.graphics.getHeight() / 2 - 800
@@ -32,9 +37,43 @@ public class JournalWindow extends Window {
         Table contentTable = new Table();
         contentTable.setFillParent(true);
 
-        Table buttonTable = new Table();
-        buttonTable.top().left();
-        buttonTable.defaults().pad(20).padLeft(120).width(400).height(40);
+        // Create sidebar with title buttons
+        // SIDEBAR BUTTONS MEASUREMENTS:
+        // - pad: 8 (vertical spacing between buttons)
+        // - padLeft: 15 (left margin from window edge)
+        // - width: 180 (button width)
+        // - height: 45 (button height)
+        Table sidebarTable = new Table();
+        sidebarTable.top().left().padTop(195);
+        sidebarTable.defaults().pad(20).padLeft(120).width(180).height(45);
+
+        TextButton btnJava = new TextButton("Java", skin);
+        TextButton btnCards = new TextButton("Cards", skin);
+        TextButton btnGame = new TextButton("Game Logic", skin);
+        TextButton btnClose = new TextButton("Close Journal", skin);
+
+        btnJava.setColor(0.8f, 0.9f, 1.0f, 1.0f);
+        btnCards.setColor(0.8f, 0.9f, 1.0f, 1.0f);
+        btnGame.setColor(0.8f, 0.9f, 1.0f, 1.0f);
+        btnClose.setColor(1.0f, 0.7f, 0.7f, 1.0f);
+
+        sidebarTable.add(btnJava).row();
+        sidebarTable.add(btnCards).row();
+        sidebarTable.add(btnGame).row();
+        sidebarTable.add(btnClose).row();
+
+        // Create main content area with topic buttons and tutorial content
+        Table mainContentTable = new Table();
+        mainContentTable.top().left();
+
+        // Topic buttons table
+        // TOPIC BUTTONS MEASUREMENTS:
+        // - pad: 6 (vertical spacing between buttons)
+        // - width: 280 (button width)
+        // - height: 35 (button height)
+        Table topicButtonTable = new Table();
+        topicButtonTable.top().left().padLeft(15).padTop(200);
+        topicButtonTable.defaults().pad(15).width(420).height(35);
 
         TextButton btnVariables = new TextButton("Variables & Data Types", skin);
         TextButton btnLoops = new TextButton("Loops", skin);
@@ -42,34 +81,131 @@ public class JournalWindow extends Window {
         TextButton btnArrays = new TextButton("Arrays & Collections", skin);
         TextButton btnMethods = new TextButton("Methods & Functions", skin);
         TextButton btnExceptions = new TextButton("Exception Handling", skin);
-        TextButton btnClose = new TextButton("Close Journal", skin);
 
-        btnVariables.setColor(0.8f, 0.9f, 1.0f, 1.0f);
-        btnLoops.setColor(0.8f, 0.9f, 1.0f, 1.0f);
-        btnOOP.setColor(0.8f, 0.9f, 1.0f, 1.0f);
-        btnArrays.setColor(0.8f, 0.9f, 1.0f, 1.0f);
-        btnMethods.setColor(0.8f, 0.9f, 1.0f, 1.0f);
-        btnExceptions.setColor(0.8f, 0.9f, 1.0f, 1.0f);
-        btnClose.setColor(1.0f, 0.7f, 0.7f, 1.0f);
+        btnVariables.setColor(0.9f, 1.0f, 0.9f, 1.0f);
+        btnLoops.setColor(0.9f, 1.0f, 0.9f, 1.0f);
+        btnOOP.setColor(0.9f, 1.0f, 0.9f, 1.0f);
+        btnArrays.setColor(0.9f, 1.0f, 0.9f, 1.0f);
+        btnMethods.setColor(0.9f, 1.0f, 0.9f, 1.0f);
+        btnExceptions.setColor(0.9f, 1.0f, 0.9f, 1.0f);
 
-        buttonTable.add(btnVariables).row();
-        buttonTable.add(btnLoops).row();
-        buttonTable.add(btnOOP).row();
-        buttonTable.add(btnArrays).row();
-        buttonTable.add(btnMethods).row();
-        buttonTable.add(btnExceptions).row();
-        buttonTable.add(btnClose).row();
+        topicButtonTable.add(btnVariables).row();
+        topicButtonTable.add(btnLoops).row();
+        topicButtonTable.add(btnOOP).row();
+        topicButtonTable.add(btnArrays).row();
+        topicButtonTable.add(btnMethods).row();
+        topicButtonTable.add(btnExceptions).row();
 
-        final TextArea tutorialContent = new TextArea("Welcome to the Java Tutorial Journal!\n\nSelect a topic from the left to learn about Java programming concepts.\n\nEach tutorial includes:\n• Theory and explanation\n• Code examples\n• Best practices\n• Common pitfalls to avoid", skin);
+        // Hide topic buttons by default
+        topicButtonTable.setVisible(false);
+
+        final TextArea tutorialContent = new TextArea("Welcome to the Java Tutorial Journal!\n\nSelect a category from the left sidebar to get started!\n\nAvailable categories:\n• Java - Programming concepts and tutorials\n• Cards - Game card system explanation\n• Game Logic - How programming integrates with gameplay", skin);
         tutorialContent.setDisabled(true);
         tutorialContent.setPrefRows(150);
         ScrollPane contentScroll = new ScrollPane(tutorialContent, skin);
         contentScroll.setFadeScrollBars(false);
         contentScroll.setScrollBarPositions(false, true);
 
-        contentTable.add(buttonTable).top().left().padRight(10);
-        contentTable.add(contentScroll).size(550, 600).top().left().padRight(100);
-        this.add(contentTable).grow().pad(20);
+        // LAYOUT SPACING MEASUREMENTS:
+        // - padRight(15): spacing between topic buttons and content area
+        // - size(480, 580): content scroll area dimensions (width x height)
+        // - padRight(30): right margin of content area
+        mainContentTable.add(topicButtonTable).top().left().padRight(20);
+        mainContentTable.add(contentScroll).size(480, 580).top().left().padRight(30).padTop(150);
+
+        // OVERALL LAYOUT SPACING:
+        // - padRight(15): spacing between sidebar and main content
+        // - pad(15): overall window padding
+        contentTable.add(sidebarTable).top().left().padRight(15);
+        contentTable.add(mainContentTable).grow().top().left();
+        this.add(contentTable).grow().pad(15);
+
+        // Sidebar button listeners
+        btnJava.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Toggle topic buttons visibility
+                boolean isVisible = topicButtonTable.isVisible();
+                topicButtonTable.setVisible(!isVisible);
+
+                if (!isVisible) {
+                    // Show topic buttons and display Java overview
+                    String content = "JAVA PROGRAMMING BASICS\n" +
+                        "=======================\n\n" +
+                        "Java is a powerful, object-oriented programming language.\n\n" +
+                        "AVAILABLE TOPICS:\n" +
+                        "• Variables & Data Types - Learn about primitive and reference types\n" +
+                        "• Loops - Control flow with for, while, and do-while loops\n" +
+                        "• OOP - Object-Oriented Programming concepts\n" +
+                        "• Arrays & Collections - Working with data structures\n" +
+                        "• Methods & Functions - Creating reusable code blocks\n" +
+                        "• Exception Handling - Managing errors and exceptions\n\n" +
+                        "Select a specific topic from the buttons to the right to get started!";
+                    tutorialContent.setText(content);
+                } else {
+                    // Hide topic buttons and show welcome message
+                    String content = "Welcome to the Java Tutorial Journal!\n\nSelect a category from the left sidebar to get started!\n\nAvailable categories:\n• Java - Programming concepts and tutorials\n• Cards - Game card system explanation\n• Game Logic - How programming integrates with gameplay";
+                    tutorialContent.setText(content);
+                }
+            }
+        });
+
+        btnCards.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Hide topic buttons when Cards is selected
+                topicButtonTable.setVisible(false);
+
+                String content = "CARD SYSTEM IN COREBRINGER\n" +
+                    "===========================\n\n" +
+                    "The card system is the core gameplay mechanic of CoreBringer.\n\n" +
+                    "CARD TYPES:\n" +
+                    "• Attack Cards - Deal damage to enemies\n" +
+                    "• Status Cards - Apply buffs or debuffs\n" +
+                    "• Utility Cards - Provide special effects\n\n" +
+                    "CARD MECHANICS:\n" +
+                    "• Each card has specific effects and costs\n" +
+                    "• Cards can be combined for powerful combinations\n" +
+                    "• Strategic card play is key to victory\n\n" +
+                    "PROGRAMMING CONNECTION:\n" +
+                    "Cards are implemented using Java classes and objects.\n" +
+                    "Understanding OOP concepts helps in creating custom cards!";
+                tutorialContent.setText(content);
+            }
+        });
+
+        btnGame.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Hide topic buttons when Game Logic is selected
+                topicButtonTable.setVisible(false);
+
+                String content = "GAME LOGIC & PROGRAMMING\n" +
+                    "=========================\n\n" +
+                    "CoreBringer combines programming concepts with gameplay.\n\n" +
+                    "GAME SYSTEMS:\n" +
+                    "• Battle System - Turn-based combat with cards\n" +
+                    "• Code Editor - Write and execute Java code\n" +
+                    "• Map System - Navigate through different areas\n" +
+                    "• Character Progression - Level up and gain new abilities\n\n" +
+                    "PROGRAMMING INTEGRATION:\n" +
+                    "• Write Java code to solve programming challenges\n" +
+                    "• Use variables, loops, and methods in your solutions\n" +
+                    "• Learn programming concepts through gameplay\n\n" +
+                    "TIPS:\n" +
+                    "• Start with simple code snippets\n" +
+                    "• Practice with the tutorial topics\n" +
+                    "• Experiment with different approaches";
+                tutorialContent.setText(content);
+            }
+        });
+
+        btnClose.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                JournalWindow.this.remove();
+            }
+        });
 
         btnVariables.addListener(new ClickListener() {
             @Override
@@ -100,7 +236,19 @@ public class JournalWindow extends Window {
                     "• Can contain letters, digits, underscore, dollar sign\n" +
                     "• Case sensitive\n" +
                     "• Cannot use Java keywords\n" +
-                    "• Use camelCase convention (e.g., firstName)";
+                    "• Use camelCase convention (e.g., firstName)\n\n" +
+                    "✅ DOS:\n" +
+                    "• Use meaningful variable names (age, userName, isActive)\n" +
+                    "• Initialize variables when declaring them\n" +
+                    "• Use appropriate data types for your needs\n" +
+                    "• Follow camelCase naming convention\n" +
+                    "• Use final for constants (final int MAX_SIZE = 100)\n\n" +
+                    "❌ DON'TS:\n" +
+                    "• Don't use single letters (a, b, c) for variable names\n" +
+                    "• Don't use reserved keywords (class, public, static)\n" +
+                    "• Don't use confusing names (l1, O0, temp1)\n" +
+                    "• Don't mix naming conventions in the same project\n" +
+                    "• Don't declare variables without initializing them when possible";
                 tutorialContent.setText(content);
             }
         });
@@ -123,7 +271,19 @@ public class JournalWindow extends Window {
                     "• continue: skips current iteration\n" +
                     "• return: exits the method\n\n" +
                     "NESTED LOOPS:\n" +
-                    "for (int i = 1; i <= 3; i++) {\n    for (int j = 1; j <= 3; j++) {\n        System.out.print(i * j + \" \" );\n    }\n    System.out.println();\n}";
+                    "for (int i = 1; i <= 3; i++) {\n    for (int j = 1; j <= 3; j++) {\n        System.out.print(i * j + \" \" );\n    }\n    System.out.println();\n}\n\n" +
+                    "✅ DOS:\n" +
+                    "• Use for loops when you know the number of iterations\n" +
+                    "• Use while loops for condition-based repetition\n" +
+                    "• Always ensure loop conditions will eventually become false\n" +
+                    "• Use meaningful loop variable names (i, j, k are acceptable for simple loops)\n" +
+                    "• Use enhanced for loops when iterating through collections\n\n" +
+                    "❌ DON'TS:\n" +
+                    "• Don't create infinite loops (while(true) without break)\n" +
+                    "• Don't modify loop variables inside enhanced for loops\n" +
+                    "• Don't use loops when simple if-else would suffice\n" +
+                    "• Don't forget to increment/decrement loop counters in while loops\n" +
+                    "• Don't use nested loops unnecessarily (can cause performance issues)";
                 tutorialContent.setText(content);
             }
         });
@@ -143,7 +303,19 @@ public class JournalWindow extends Window {
                     "INHERITANCE EXAMPLE:\n" +
                     "public class GraduateStudent extends Student {\n    private String major;\n\n    public GraduateStudent(String name, int age, String major) {\n        super(name, age); // Call parent constructor\n        this.major = major;\n    }\n}\n\n" +
                     "INTERFACE EXAMPLE:\n" +
-                    "public interface Drawable {\n    void draw();\n    void erase();\n}";
+                    "public interface Drawable {\n    void draw();\n    void erase();\n}\n\n" +
+                    "✅ DOS:\n" +
+                    "• Use private fields and public methods (encapsulation)\n" +
+                    "• Create meaningful class names (Student, Car, BankAccount)\n" +
+                    "• Use inheritance for 'is-a' relationships\n" +
+                    "• Implement interfaces for 'can-do' relationships\n" +
+                    "• Use this keyword to distinguish between instance and parameter variables\n\n" +
+                    "❌ DON'TS:\n" +
+                    "• Don't make fields public (breaks encapsulation)\n" +
+                    "• Don't use inheritance for 'has-a' relationships (use composition)\n" +
+                    "• Don't create classes with too many responsibilities\n" +
+                    "• Don't forget to call super() in constructors when extending classes\n" +
+                    "• Don't use inheritance just to reuse code";
                 tutorialContent.setText(content);
             }
         });
@@ -162,7 +334,19 @@ public class JournalWindow extends Window {
                     "COLLECTIONS FRAMEWORK:\n" +
                     "// ArrayList (dynamic array)\nArrayList<String> names = new ArrayList<>();\nnames.add(\"Alice\");\nnames.add(\"Bob\");\nnames.remove(0);\n\n// HashMap (key-value pairs)\nHashMap<String, Integer> ages = new HashMap<>();\nages.put(\"Alice\", 25);\nages.put(\"Bob\", 30);\nint aliceAge = ages.get(\"Alice\"); // 25\n\n// HashSet (unique elements)\nHashSet<String> uniqueNames = new HashSet<>();\nuniqueNames.add(\"Alice\");\nuniqueNames.add(\"Alice\"); // Won't add duplicate\n\n" +
                     "ITERATING OVER COLLECTIONS:\n" +
-                    "for (String name : names) {\n    System.out.println(name);\n}";
+                    "for (String name : names) {\n    System.out.println(name);\n}\n\n" +
+                    "✅ DOS:\n" +
+                    "• Use ArrayList when you need dynamic sizing\n" +
+                    "• Use HashMap for key-value pair storage\n" +
+                    "• Always check array bounds before accessing elements\n" +
+                    "• Use enhanced for loops when you don't need the index\n" +
+                    "• Initialize collections with appropriate initial capacity when known\n\n" +
+                    "❌ DON'TS:\n" +
+                    "• Don't access array elements beyond the array length\n" +
+                    "• Don't use arrays when you need dynamic sizing frequently\n" +
+                    "• Don't modify collections while iterating (use Iterator)\n" +
+                    "• Don't use raw types (ArrayList instead of ArrayList<String>)\n" +
+                    "• Don't forget that arrays are 0-indexed";
                 tutorialContent.setText(content);
             }
         });
@@ -183,7 +367,19 @@ public class JournalWindow extends Window {
                     "RECURSION EXAMPLE:\n" +
                     "public int factorial(int n) {\n    if (n <= 1) { return 1; }\n    return n * factorial(n - 1);\n}\n\n" +
                     "VARARGS (Variable Arguments):\n" +
-                    "public int sum(int... numbers) {\n    int total = 0;\n    for (int num : numbers) { total += num; }\n    return total;\n}\n\n// Usage:\nint result1 = sum(1, 2, 3); // 6\nint result2 = sum(1, 2, 3, 4, 5); // 15";
+                    "public int sum(int... numbers) {\n    int total = 0;\n    for (int num : numbers) { total += num; }\n    return total;\n}\n\n// Usage:\nint result1 = sum(1, 2, 3); // 6\nint result2 = sum(1, 2, 3, 4, 5); // 15\n\n" +
+                    "✅ DOS:\n" +
+                    "• Use descriptive method names (calculateTotal, validateInput)\n" +
+                    "• Keep methods focused on a single responsibility\n" +
+                    "• Use appropriate return types (void for actions, specific types for calculations)\n" +
+                    "• Include parameter validation when necessary\n" +
+                    "• Use method overloading for similar functionality with different parameters\n\n" +
+                    "❌ DON'TS:\n" +
+                    "• Don't create methods that are too long (keep under 50 lines)\n" +
+                    "• Don't use void methods when you need to return a value\n" +
+                    "• Don't forget to handle edge cases in recursive methods\n" +
+                    "• Don't use too many parameters (consider using objects)\n" +
+                    "• Don't create methods that do multiple unrelated things";
                 tutorialContent.setText(content);
             }
         });
@@ -206,14 +402,20 @@ public class JournalWindow extends Window {
                     "THROWING EXCEPTIONS:\n" +
                     "public void checkAge(int age) throws IllegalArgumentException {\n    if (age < 0) {\n        throw new IllegalArgumentException(\"Age cannot be negative\");\n    }\n    System.out.println(\"Valid age: \" + age);\n}\n\n" +
                     "CUSTOM EXCEPTION:\n" +
-                    "public class InvalidInputException extends Exception {\n    public InvalidInputException(String message) {\n        super(message);\n    }\n}\n\n// Usage:\ntry {\n    throw new InvalidInputException(\"Invalid user input\");\n} catch (InvalidInputException e) {\n    System.out.println(\"Custom error: \" + e.getMessage());\n}";
+                    "public class InvalidInputException extends Exception {\n    public InvalidInputException(String message) {\n        super(message);\n    }\n}\n\n// Usage:\ntry {\n    throw new InvalidInputException(\"Invalid user input\");\n} catch (InvalidInputException e) {\n    System.out.println(\"Custom error: \" + e.getMessage());\n}\n\n" +
+                    "✅ DOS:\n" +
+                    "• Always handle checked exceptions\n" +
+                    "• Use specific exception types in catch blocks\n" +
+                    "• Provide meaningful error messages\n" +
+                    "• Use finally blocks for cleanup operations\n" +
+                    "• Log exceptions for debugging purposes\n\n" +
+                    "❌ DON'TS:\n" +
+                    "• Don't catch exceptions and ignore them (empty catch blocks)\n" +
+                    "• Don't catch Exception unless absolutely necessary\n" +
+                    "• Don't use exceptions for normal program flow\n" +
+                    "• Don't throw exceptions without good reason\n" +
+                    "• Don't forget to close resources in finally blocks";
                 tutorialContent.setText(content);
-            }
-        });
-        btnClose.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                JournalWindow.this.remove();
             }
         });
     }
